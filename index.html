@@ -97,6 +97,16 @@ footer .copy{margin-left:auto}
   .grid{grid-template-columns:1fr}
   .stat{grid-template-columns:1fr;gap:10px;padding:26px}
 }
+
+/* newsletter */
+.nlbox{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:34px;max-width:660px;margin:0 auto;text-align:center}
+.nlbox h3{font-family:var(--head);font-weight:900;font-size:24px;text-transform:uppercase;margin-bottom:8px}
+.nlbox p{color:var(--dim);margin-bottom:18px}
+.nlform{display:flex;gap:10px}
+.nlform input{flex:1;background:var(--bg2);border:1px solid var(--line);color:var(--ink);padding:12px 14px;border-radius:4px;font-family:var(--mono);font-size:14px}
+.nlform button{background:var(--acid);color:#000;border:0;font-weight:700;font-family:var(--mono);text-transform:uppercase;padding:12px 20px;border-radius:4px;cursor:pointer}
+.nlform button:hover{background:var(--mag);color:#fff}
+.nl-note{font-size:12px;color:var(--dim);font-family:var(--mono);margin-top:12px}
 </style>
 </head>
 <body>
@@ -109,7 +119,7 @@ footer .copy{margin-left:auto}
     <nav>
       <a href="#">AI</a><a href="#">Telefoni</a><a href="#">Igre</a><a href="#">Internet</a><a href="#">Startupi</a>
     </nav>
-    <a class="btn-sub" href="#">Naroči se</a>
+    <a class="btn-sub" href="#naroci">Naroči se</a>
   </div>
 </header>
 
@@ -137,6 +147,22 @@ footer .copy{margin-left:auto}
       <h3>Toliko evropskih mladih vodi svoj blog ali medij</h3>
       <p>Ti si en od njih. Digitalnik je dokaz, da za dobre vsebine ne rabiš uredništva z 200 ljudmi, ampak lepo nareto stran in prave teme.</p>
     </div>
+  </section>
+
+
+  <div class="sect" id="naroci"><h2>Novičnik</h2></div>
+  <section class="nlbox">
+    <h3>Digitalnik v tvojem e-naslovu</h3>
+    <p>Ena novica, ki šteje: AI, telefoni, igre in internet, brez fraz.</p>
+    <form action="https://api.web3forms.com/submit" method="POST" class="nlform">
+      <input type="hidden" name="access_key" value="9ba40909-6fa1-4d5a-8a4b-c585440fc282">
+      <input type="hidden" name="subject" value="Prijava na Digitalnik novičnik">
+      <input type="hidden" name="from_name" value="Digitalnik - prijava na novičnik">
+      <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
+      <input type="email" name="email" placeholder="tvoj@eposta.si" required>
+      <button type="submit">Naroči me</button>
+    </form>
+    <p class="nl-note">Brez vsiljene pošte. Odjava kadar koli.</p>
   </section>
 
 </main>
