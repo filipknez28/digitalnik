@@ -4,64 +4,132 @@
 <title>Digitalnik Urejevalnik</title>
 <hta:application applicationname="DigitalnikUrejevalnik" singleinstance="yes" scroll="yes" windowstate="normal"/>
 <style>
-body{background:#0b0b0f;color:#f2f2f5;font-family:'Segoe UI',Arial,sans-serif;margin:0}
-.wrap{max-width:1150px;margin:0 auto;padding:14px 18px}
-.topbar{display:flex;align-items:center;gap:8px;border-bottom:2px solid #f2f2f5;padding-bottom:10px}
-.logo{font-family:Impact,'Arial Black',sans-serif;font-size:22px;font-weight:900;text-transform:uppercase;letter-spacing:-1px;white-space:nowrap}
-.logo em{font-style:normal;color:#c9ff2e;font-size:13px;letter-spacing:0}
-.blik{display:inline-block;width:10px;height:10px;background:#ff3df0;border-radius:2px;transform:rotate(12deg);margin-right:5px}
+body{background:#1e2029;color:#e8e9ed;font-family:'Segoe UI',Arial,sans-serif;margin:0}
+.wrap{max-width:1280px;margin:0 auto;padding:10px 14px}
+/* Brave-style top bar */
+#topbar{display:flex;align-items:center;gap:10px;background:#2a2d37;border-radius:12px 12px 0 0;padding:8px 12px}
+.tab{display:flex;align-items:center;gap:8px;background:#1e2029;border-radius:8px;padding:7px 14px;font-size:13px}
+.tab .blik{display:inline-block;width:9px;height:9px;background:#ff3df0;border-radius:2px;transform:rotate(12deg)}
+.tab b{font-family:Impact,'Arial Black',sans-serif;font-weight:900;text-transform:uppercase;letter-spacing:-.5px}
+.tab em{font-style:normal;color:#c9ff2e;font-size:11px}
+.tab small{color:#9b9ba8;font-family:Consolas,monospace}
 .spacer{flex:1}
-.btn{background:#c9ff2e;color:#000;border:0;font-weight:700;padding:8px 14px;cursor:pointer;font-size:13px}
-.btn.gray{background:#23232e;color:#f2f2f5}
-.btn:hover{opacity:.85}
-.cols{display:flex;gap:16px;padding:14px 0}
-#left{width:320px;overflow:auto;border-right:1px solid #23232e;padding-right:14px;min-height:420px}
-.item{padding:9px 10px;border:1px solid #23232e;margin-bottom:8px;cursor:pointer;border-radius:4px}
+.pill{border:0;border-radius:16px;padding:8px 16px;cursor:pointer;font-size:13px;font-weight:600;background:#3a3e4a;color:#e8e9ed}
+.pill:hover{background:#4a4f5e}
+.pill.acid{background:#c9ff2e;color:#000;font-weight:700}
+/* body row */
+#bodyrow{display:flex;gap:0;background:#2a2d37;border-radius:0 0 12px 12px;min-height:560px}
+#sidenav{width:52px;background:#20222b;border-radius:0 0 0 12px;display:flex;flex-direction:column;align-items:center;padding-top:14px;gap:8px}
+.sbtn{width:36px;height:36px;border:0;border-radius:9px;background:transparent;color:#9b9ba8;font-size:17px;cursor:pointer}
+.sbtn:hover{background:#2f3340;color:#e8e9ed}
+.sbtn.on{background:#c9ff2e;color:#000}
+#view-nov{display:flex;flex:1;gap:14px;padding:14px}
+.col-label{display:block;font-family:Consolas,monospace;font-size:11px;color:#9b9ba8;text-transform:uppercase;letter-spacing:1px;margin:2px 0 8px}
+#leftcol{width:280px;display:flex;flex-direction:column}
+#f-iskaj{width:100%;background:#1e2029;border:1px solid #3a3e4a;border-radius:20px;color:#e8e9ed;padding:9px 14px;font-size:13px;margin-bottom:10px}
+#list{flex:1;overflow:auto}
+.item{padding:9px 11px;border:1px solid #3a3e4a;margin-bottom:8px;cursor:pointer;border-radius:9px;background:#242730}
 .item:hover{border-color:#c9ff2e}
-.item.sel{border-color:#ff3df0}
-.item small{color:#9b9ba8;font-family:Consolas,monospace;font-size:11px}
-#right{flex:1}
-label{display:block;font-family:Consolas,monospace;font-size:11px;color:#9b9ba8;text-transform:uppercase;margin:10px 0 4px;letter-spacing:1px}
-input,select,textarea{width:100%;background:#12121a;border:1px solid #23232e;color:#f2f2f5;padding:9px;font-family:'Segoe UI',Arial,sans-serif;font-size:14px;border-radius:3px}
+.item.sel{border-color:#ff3df0;background:#2b2333}
+.item small{color:#9b9ba8;font-family:Consolas,monospace;font-size:10px}
+#btn-nova{border:0;border-radius:9px;background:#3a3e4a;color:#e8e9ed;padding:9px;cursor:pointer;font-weight:600}
+#btn-nova:hover{background:#c9ff2e;color:#000}
+#midcol{flex:1}
+input,select,textarea{width:100%;background:#1e2029;border:1px solid #3a3e4a;color:#e8e9ed;padding:9px;font-family:'Segoe UI',Arial,sans-serif;font-size:14px;border-radius:9px}
 textarea{resize:vertical}
-#f-povz{height:64px}
-#f-bes{height:210px}
-.formbtns{margin-top:12px;display:flex;gap:8px}
-#log{font-family:Consolas,monospace;font-size:12px;color:#c9ff2e;min-height:36px;padding:8px 0;border-top:1px solid #23232e;margin-top:10px}
-.row{display:flex;gap:8px;align-items:center;margin-top:4px}
-.row input{width:360px}
-.row label{margin:0}
+#f-povz{height:62px}
+#f-bes{height:190px}
+.toolrow{display:flex;gap:8px;margin:12px 0 2px}
+#prevcol{width:300px}
+#preview{background:#14161c;border:1px solid #3a3e4a;border-radius:10px;padding:16px;min-height:180px}
+.pv-empty{color:#6f7280;font-size:12px;font-family:Consolas,monospace}
+.kick{font-family:Consolas,monospace;font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:#c9ff2e;margin-bottom:8px}
+.pv-title{font-family:Impact,'Arial Black',sans-serif;font-size:24px;line-height:1;text-transform:uppercase;letter-spacing:-.5px;margin-bottom:10px}
+.pv-dek{color:#9b9ba8;font-size:13px;margin-bottom:10px}
+.pv-meta{font-family:Consolas,monospace;font-size:10px;color:#9b9ba8}
+#counts{font-family:Consolas,monospace;font-size:11px;color:#9b9ba8;margin-top:10px}
+#log{font-family:Consolas,monospace;font-size:12px;color:#c9ff2e;background:#2a2d37;border-radius:10px;margin-top:10px;padding:10px 14px;min-height:20px}
+/* settings view */
+#view-nast{flex:1;padding:18px;display:none}
+.card{background:#242730;border:1px solid #3a3e4a;border-radius:12px;padding:18px;margin-bottom:14px}
+.card h3{margin:0 0 8px;font-size:15px}
+.card p, .card li{color:#9b9ba8;font-size:13px;line-height:1.6}
+.card ol{margin:6px 0 0 18px}
+.row{display:flex;gap:8px;align-items:center}
+.row input{width:400px}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="topbar">
-    <div class="logo"><span class="blik"></span>Digitalnik <em>UREJEVALNIK</em></div>
+  <div id="topbar">
+    <div class="tab"><span class="blik"></span><b>Digitalnik</b><em>UREJEVALNIK</em><small>index.html</small></div>
     <div class="spacer"></div>
-    <button class="btn gray" id="btn-prenesi">Prenesi stran</button>
-    <button class="btn gray" id="btn-objavi">Objavi na GitHub</button>
+    <button class="pill" id="btn-prenesi">Prenesi stran</button>
+    <button class="pill acid" id="btn-objavi">Objavi na GitHub</button>
   </div>
-  <div class="cols">
-    <div id="left">
-      <label>Novice (najnovejše zgoraj)</label>
-      <div id="list"></div>
-      <button class="btn gray" id="btn-nova" style="width:100%">+ Nova novica</button>
+  <div id="bodyrow">
+    <div id="sidenav">
+      <button id="nav-nov" class="sbtn on" title="Novice">&#9998;</button>
+      <button id="nav-nast" class="sbtn" title="Nastavitve">&#9881;</button>
     </div>
-    <div id="right">
-      <label>Naslov</label><input id="f-naslov">
-      <label>Kategorija</label>
-      <select id="f-kat"><option>AI</option><option>Telefoni</option><option>Igre</option><option>Internet</option><option>Startupi</option></select>
-      <label>Povzetek (kratek, gre pod naslov)</label><textarea id="f-povz"></textarea>
-      <label>Besedilo</label><textarea id="f-bes"></textarea>
-      <label>Avtor</label><input id="f-avt" value="Filip Knez">
-      <div class="formbtns">
-        <button class="btn" id="btn-shrani">Shrani novico</button>
-        <button class="btn gray" id="btn-brisi">Izbriši izbrano</button>
+    <div id="view-nov">
+      <div id="leftcol">
+        <label class="col-label">Novice (najnovejša je naslovnica)</label>
+        <input id="f-iskaj" placeholder="išči novice ...">
+        <div id="list"></div>
+        <button id="btn-nova">+ Nova novica</button>
+      </div>
+      <div id="midcol">
+        <label class="col-label">Urejanje</label>
+        <input id="f-naslov" placeholder="Naslov novice">
+        <div class="toolrow">
+          <select id="f-kat" style="width:160px"><option>AI</option><option>Telefoni</option><option>Igre</option><option>Internet</option><option>Startupi</option></select>
+          <input id="f-avt" value="Filip Knez" style="width:170px">
+        </div>
+        <label class="col-label" style="margin-top:10px">Povzetek (kratko, gre pod naslov)</label>
+        <textarea id="f-povz"></textarea>
+        <label class="col-label" style="margin-top:10px">Besedilo</label>
+        <textarea id="f-bes"></textarea>
+        <div class="toolrow">
+          <button class="pill acid" id="btn-shrani">Shrani novico</button>
+          <button class="pill" id="btn-brisi">Izbriši</button>
+          <button class="pill" id="btn-dup">Podvoji</button>
+          <button class="pill" id="btn-gor">&#9650;</button>
+          <button class="pill" id="btn-dol">&#9660;</button>
+        </div>
+      </div>
+      <div id="prevcol">
+        <label class="col-label">Predogled</label>
+        <div id="preview"></div>
+        <div id="counts"></div>
+        <label class="col-label" style="margin-top:12px">Kaj naredijo gumbi</label>
+        <div class="card" style="margin:0">
+          <p><b style="color:#e8e9ed">Shrani novico</b> zapiše spremembo v index.html na tvojem računalniku.<br>
+          <b style="color:#e8e9ed">Objavi na GitHub</b> objavi spremembe na digitalnik.vercel.app.<br>
+          <b style="color:#e8e9ed">&#9650; &#9660;</b> premakne novico po seznamu (prva je naslovnica).<br>
+          Tipka Ctrl+S shrani novico.</p>
+        </div>
+      </div>
+    </div>
+    <div id="view-nast">
+      <div class="card">
+        <h3>GitHub žeton (za objavo)</h3>
+        <ol><li>Obišči <b style="color:#e8e9ed">github.com/settings/tokens</b></li>
+        <li>Generate new token &rarr; Fine-grained tokens</li>
+        <li>Repository access: Only select repositories &rarr; izberi <b style="color:#e8e9ed">digitalnik</b></li>
+        <li>Permissions &rarr; Contents: <b style="color:#e8e9ed">Read and write</b></li>
+        <li>Generate in prilepi žeton sem:</li></ol>
+        <div class="row" style="margin-top:10px"><input id="f-token" placeholder="github_pat_..."><button class="pill" id="btn-token">Shrani žeton</button></div>
+        <p style="margin-top:8px">Žeton ostane samo v datoteki token.txt na tvojem računalniku.</p>
+      </div>
+      <div class="card">
+        <h3>O programu</h3>
+        <p>Digitalnik Urejevalnik ureja strani digitalnik.vercel.app in github.com/filipknez28/digitalnik.<br>
+        Nova različica v stilu brskalnika: iskanje, predogled, števec besed, premikanje novic, podvajanje, samodejno shranjevanje osnutka in bližnjica Ctrl+S.</p>
       </div>
     </div>
   </div>
-  <div class="row"><label>GitHub žeton:</label><input id="f-token" placeholder="ustvari ga na github.com/settings/tokens"><button class="btn gray" id="btn-token">Shrani žeton</button></div>
-  <div id="log">Pripravljeno. Najprej klikni "Prenesi stran".</div>
+  <div id="log">Pripravljeno. Najprej klikni Prenesi stran.</div>
 </div>
 <script language="JScript">
 var FSO=new ActiveXObject("Scripting.FileSystemObject");
@@ -69,53 +137,21 @@ var API="https://api.github.com/repos/filipknez28/digitalnik/contents/index.html
 var RAW="https://raw.githubusercontent.com/filipknez28/digitalnik/main/index.html";
 var CATCLS={"AI":"c-ai","Telefoni":"c-fon","Igre":"c-igra","Internet":"c-net","Startupi":"c-ai"};
 var html="", data=[], cur=-1;
-
 function myDir(){ var p=unescape(location.pathname).replace(/^\//,""); return p.substring(0,p.lastIndexOf("/")+1); }
-var IDX=myDir()+"index.html", TOKF=myDir()+"token.txt";
+var IDX=myDir()+"index.html", TOKF=myDir()+"token.txt", DRAFTF=myDir()+"osnutek.txt";
 function $(id){return document.getElementById(id);}
 function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
 function say(t){$("log").innerHTML=esc(t);}
-
-function readText(path){
-  var st=new ActiveXObject("ADODB.Stream");
-  st.Type=2; st.Charset="utf-8"; st.Open(); st.LoadFromFile(path);
-  var t=st.ReadText(); st.Close(); return t;
-}
-function writeText(path,t){
-  var st=new ActiveXObject("ADODB.Stream");
-  st.Type=2; st.Charset="utf-8"; st.Open(); st.WriteText(t);
-  st.SaveToFile(path,2); st.Close();
-}
-function utf8B64(s){
-  var st=new ActiveXObject("ADODB.Stream");
-  st.Type=2; st.Charset="utf-8"; st.Open(); st.WriteText(s);
-  st.Position=0; st.Type=1;
-  var bin=st.Read(); st.Close();
-  var xml=new ActiveXObject("MSXML2.DOMDocument.6.0");
-  var n=xml.createElement("b64"); n.dataType="bin.base64"; n.nodeTypedValue=bin;
-  return n.text;
-}
-function fmtKdaj(d){
-  function p2(n){return (n<10?"0":"")+n;}
-  var now=new Date();
-  var base=p2(d.getDate())+". "+p2(d.getMonth()+1)+".";
+function readText(path){ var st=new ActiveXObject("ADODB.Stream"); st.Type=2; st.Charset="utf-8"; st.Open(); st.LoadFromFile(path); var t=st.ReadText(); st.Close(); return t; }
+function writeText(path,t){ var st=new ActiveXObject("ADODB.Stream"); st.Type=2; st.Charset="utf-8"; st.Open(); st.WriteText(t); st.SaveToFile(path,2); st.Close(); }
+function utf8B64(s){ var st=new ActiveXObject("ADODB.Stream"); st.Type=2; st.Charset="utf-8"; st.Open(); st.WriteText(s); st.Position=0; st.Type=1; var bin=st.Read(); st.Close(); var xml=new ActiveXObject("MSXML2.DOMDocument.6.0"); var n=xml.createElement("b64"); n.dataType="bin.base64"; n.nodeTypedValue=bin; return n.text; }
+function fmtKdaj(d){ function p2(n){return (n<10?"0":"")+n;} var now=new Date(); var base=p2(d.getDate())+". "+p2(d.getMonth()+1)+".";
   if(d.toDateString()==now.toDateString()) return "danes ob "+p2(d.getHours())+":"+p2(d.getMinutes());
-  return base+" "+d.getFullYear()+" ob "+p2(d.getHours())+":"+p2(d.getMinutes());
-}
+  return base+" "+d.getFullYear()+" ob "+p2(d.getHours())+":"+p2(d.getMinutes()); }
 function minB(t){ var n=t.replace(/^\s+|\s+$/g,"").split(/\s+/).length; return Math.max(1,Math.round(n/200))+" min branja"; }
-
-function parseData(){
-  var a=html.indexOf('id="novice-data">'), b=-1;
-  if(a>=0){ b=html.indexOf('<'+'/scr'+'ipt>',a); }
-  if(a<0||b<0){ data=[]; return; }
-  var j=html.substring(a+17,b);
-  try{ data=JSON.parse(j); }catch(e){ data=[]; }
-}
-function splice(s,a,b,rep){
-  var i=s.indexOf(a), j=s.indexOf(b);
-  if(i<0||j<0||j<i) return s;
-  return s.substring(0,i+a.length)+"\n"+rep+"\n"+s.substring(j);
-}
+function parseData(){ var a=html.indexOf('id="novice-data">'), b=-1; if(a>=0){ b=html.indexOf('<'+'/scr'+'ipt>',a); }
+  if(a<0||b<0){ data=[]; return; } var j=html.substring(a+17,b); try{ data=JSON.parse(j); }catch(e){ data=[]; } }
+function splice(s,a,b,rep){ var i=s.indexOf(a), j=s.indexOf(b); if(i<0||j<0||j<i) return s; return s.substring(0,i+a.length)+"\n"+rep+"\n"+s.substring(j); }
 function renderBlock(){
   var s='<scr'+'ipt type="application/json" id="novice-data">'+JSON.stringify(data).replace(/<\//g,"<\\/")+'<'+'/scr'+'ipt>\n';
   if(data.length==0){
@@ -136,77 +172,67 @@ function renderBlock(){
   }
   return s;
 }
-function tickerHTML(){
-  var t="";
+function tickerHTML(){ var t="";
   if(data.length==0){ t="<b>DIGITALNIK</b> Prva novica prihaja kmalu."; }
   else{ for(var i=0;i<data.length;i++){ t+="<b>"+String(data[i].kat).toUpperCase()+"</b> "+esc(data[i].naslov)+" "; } }
-  return "<span>"+t+"</span>";
-}
-function rebuild(){
-  html=splice(html,"<!--NOVICE:START-->","<!--NOVICE:END-->",renderBlock());
-  html=splice(html,"<!--TICKER:START-->","<!--TICKER:END-->",tickerHTML());
-}
-function saveLocal(){
-  rebuild(); writeText(IDX,html);
-  say("Shranjeno lokalno ("+data.length+" novic). Za objavo na spletu klikni Objavi na GitHub.");
-}
-function loadLocal(){
-  if(!FSO.FileExists(IDX)){ say("V tej mapi ni index.html. Klikni Prenesi stran."); renderList(); return; }
-  html=readText(IDX); parseData(); renderList();
-  say("Naloženo: "+data.length+" novic. Piši, Shrani, nato Objavi na GitHub.");
-}
-function downloadSite(){
-  var x=new ActiveXObject("MSXML2.ServerXMLHTTP.6.0");
-  x.open("GET",RAW,false); x.send();
-  if(x.status==200){ html=x.responseText; writeText(IDX,html); parseData(); renderList(); say("Preneseno s spleta: "+data.length+" novic."); }
-  else say("Prenos ni uspel (koda "+x.status+"). Preveri internet.");
-}
-function renderList(){
-  var el=$("list"); el.innerHTML="";
-  if(data.length==0){ el.innerHTML='<div class="item"><small>seznam je prazen</small></div>'; return; }
+  return "<span>"+t+"</span>"; }
+function rebuild(){ html=splice(html,"<!--NOVICE:START-->","<!--NOVICE:END-->",renderBlock()); html=splice(html,"<!--TICKER:START-->","<!--TICKER:END-->",tickerHTML()); }
+function saveLocal(){ rebuild(); writeText(IDX,html); say("Shranjeno lokalno ("+data.length+" novic). Za objavo na spletu klikni Objavi na GitHub."); }
+function loadLocal(){ if(!FSO.FileExists(IDX)){ say("V tej mapi ni index.html. Klikni Prenesi stran."); renderList(""); loadDraft(); return; }
+  html=readText(IDX); parseData(); renderList(""); loadDraft();
+  say("Naloženo: "+data.length+" novic."+(data.length==0?" Napiši prvo novico in Objavi.":"")); }
+function downloadSite(){ var x=new ActiveXObject("MSXML2.ServerXMLHTTP.6.0"); x.open("GET",RAW,false); x.send();
+  if(x.status==200){ html=x.responseText; writeText(IDX,html); parseData(); renderList(""); say("Preneseno s spleta: "+data.length+" novic."); }
+  else say("Prenos ni uspel (koda "+x.status+"). Preveri internet."); }
+function renderList(q){
+  var el=$("list"); el.innerHTML=""; q=(q||"").toLowerCase();
+  var shown=0;
   for(var i=0;i<data.length;i++){
+    if(q && String(data[i].naslov+" "+data[i].kat).toLowerCase().indexOf(q)<0) continue;
+    shown++;
     var d=document.createElement("div");
     d.className="item"+(i==cur?" sel":"");
     d.innerHTML="<small>"+esc(data[i].kat)+" · "+esc(data[i].kdaj)+"</small><br>"+esc(data[i].naslov);
     d.onclick=(function(k){return function(){openItem(k);};})(i);
     el.appendChild(d);
   }
+  if(shown==0) el.innerHTML='<div class="item"><small>'+(q?"ni zadetkov":"seznam je prazen")+'</small></div>';
 }
-function clearForm(){
-  $("f-naslov").value=""; $("f-povz").value=""; $("f-bes").value=""; $("f-kat").value="AI";
-}
-function openItem(i){
-  cur=i; var a=data[i];
-  $("f-naslov").value=a.naslov; $("f-kat").value=a.kat;
-  $("f-povz").value=a.povz; $("f-bes").value=a.bes; $("f-avt").value=a.avt;
-  renderList();
-}
+function clearForm(){ $("f-naslov").value=""; $("f-povz").value=""; $("f-bes").value=""; $("f-kat").value="AI"; updateCounts(); }
+function openItem(i){ cur=i; var a=data[i];
+  $("f-naslov").value=a.naslov; $("f-kat").value=a.kat; $("f-povz").value=a.povz; $("f-bes").value=a.bes; $("f-avt").value=a.avt;
+  renderList($("f-iskaj").value); updateCounts(); }
 function saveItem(){
   var nas=$("f-naslov").value.replace(/^\s+|\s+$/g,"");
   if(!nas){ say("Naslov je obvezen."); return; }
   var it={naslov:nas,kat:$("f-kat").value,povz:$("f-povz").value,bes:$("f-bes").value,avt:$("f-avt").value||"Filip Knez",kdaj:fmtKdaj(new Date())};
   if(cur<0){ data.unshift(it); cur=0; } else { data[cur]=it; }
-  saveLocal(); renderList();
+  saveLocal(); renderList($("f-iskaj").value); updateCounts();
 }
 function delItem(){
   if(cur<0){ say("Najprej izberi novico na seznamu."); return; }
   var ok=true; try{ ok=confirm("Izbrišem novico '"+data[cur].naslov+"'?"); }catch(e){}
   if(!ok) return;
-  data.splice(cur,1); cur=-1; clearForm(); saveLocal(); renderList();
+  data.splice(cur,1); cur=-1; clearForm(); saveLocal(); renderList($("f-iskaj").value);
 }
-function saveToken(){
-  var t=$("f-token").value.replace(/^\s+|\s+$/g,"");
-  if(!t){ say("Žeton je prazen."); return; }
-  writeText(TOKF,t); say("Žeton shranjen v token.txt (ostane samo na tvojem računalniku).");
+function dupItem(){
+  if(cur<0){ say("Najprej izberi novico."); return; }
+  var c={}; for(var k in data[cur]) c[k]=data[cur][k];
+  c.naslov=c.naslov+" (kopija)"; c.kdaj=fmtKdaj(new Date());
+  data.splice(cur+1,0,c); cur=cur+1;
+  saveLocal(); renderList($("f-iskaj").value); say("Novica podvojena.");
 }
-function readToken(){
-  if(!FSO.FileExists(TOKF)) return "";
-  return readText(TOKF).replace(/^\s+|\s+$/g,"");
-}
+function moveIt(d){ if(cur<0){ say("Izberi novico."); return; }
+  var j=cur+d; if(j<0||j>=data.length) return;
+  var t=data[cur]; data[cur]=data[j]; data[j]=t; cur=j;
+  saveLocal(); renderList($("f-iskaj").value); }
+function saveToken(){ var t=$("f-token").value.replace(/^\s+|\s+$/g,""); if(!t){ say("Žeton je prazen."); return; }
+  writeText(TOKF,t); say("Žeton shranjen v token.txt."); }
+function readToken(){ if(!FSO.FileExists(TOKF)) return ""; return readText(TOKF).replace(/^\s+|\s+$/g,""); }
 function publish(){
   rebuild(); writeText(IDX,html);
   var tok=readToken();
-  if(!tok){ say("Manjka GitHub žeton: prilepi ga spodaj, klikni Shrani žeton in nato spet Objavi."); return; }
+  if(!tok){ showView("nast"); say("Manjka GitHub žeton: nastavi ga pod Nastavitvami (⚙ zgoraj levo) in poskusi znova."); return; }
   say("Objavljam ...");
   var x=new ActiveXObject("MSXML2.ServerXMLHTTP.6.0");
   x.open("GET",API,false);
@@ -227,14 +253,48 @@ function publish(){
   if(x.status==200||x.status==201) say("Objavljeno! Stran se posodobi na digitalnik.vercel.app v približno minuti.");
   else say("GitHub ni sprejel objave (koda "+x.status+"): "+x.responseText.substring(0,160));
 }
-window.resizeTo(1180,840);
+function updateCounts(){
+  var bes=$("f-bes").value, nas=$("f-naslov").value;
+  var words=bes.replace(/^\s+|\s+$/g,"").split(/\s+/).length;
+  if(bes.replace(/^\s+|\s+$/g,"")=="") words=0;
+  $("counts").innerHTML=nas.length+" znakov naslova · "+words+" besed · ~"+Math.max(1,Math.round(words/200))+" min branja";
+  var pv=$("preview");
+  var n=nas.replace(/^\s+|\s+$/g,"");
+  if(!n){ pv.innerHTML='<div class="pv-empty">Tukaj bo videti, kako bo novica izgledala na strani. Začni pisati naslov ...</div>'; return; }
+  pv.innerHTML='<div class="kick">'+esc($("f-kat").value)+'</div><div class="pv-title">'+esc(nas)+'</div>'+
+    ($("f-povz").value?'<div class="pv-dek">'+esc($("f-povz").value)+'</div>':'')+
+    '<div class="pv-meta">'+esc($("f-avt").value||"Filip Knez")+' · '+minB(bes)+'</div>';
+}
+function saveDraft(){ try{ writeText(DRAFTF,JSON.stringify({naslov:$("f-naslov").value,kat:$("f-kat").value,povz:$("f-povz").value,bes:$("f-bes").value,avt:$("f-avt").value})); }catch(e){} }
+function loadDraft(){ if(!FSO.FileExists(DRAFTF)) return;
+  try{ var d=JSON.parse(readText(DRAFTF));
+    if(d&&d.naslov){ $("f-naslov").value=d.naslov||""; $("f-kat").value=d.kat||"AI"; $("f-povz").value=d.povz||""; $("f-bes").value=d.bes||""; $("f-avt").value=d.avt||"Filip Knez"; updateCounts(); say("Naloženo: "+data.length+" novic. Osnutek obnovljen."); }
+  }catch(e){} }
+function showView(v){
+  if(v=="nov"){ $("view-nov").style.display="flex"; $("view-nast").style.display="none"; $("nav-nov").className="sbtn on"; $("nav-nast").className="sbtn"; }
+  else{ $("view-nov").style.display="none"; $("view-nast").style.display="block"; $("nav-nast").className="sbtn on"; $("nav-nov").className="sbtn"; }
+}
+window.resizeTo(1300,860);
 $("btn-prenesi").onclick=downloadSite;
-$("btn-nova").onclick=function(){cur=-1;clearForm();renderList();say("Nova novica: izpolni in Shrani.");};
+$("btn-objavi").onclick=publish;
+$("btn-nova").onclick=function(){cur=-1;clearForm();renderList($("f-iskaj").value);say("Nova novica: izpolni in Shrani.");};
 $("btn-shrani").onclick=saveItem;
 $("btn-brisi").onclick=delItem;
+$("btn-dup").onclick=dupItem;
+$("btn-gor").onclick=function(){moveIt(-1);};
+$("btn-dol").onclick=function(){moveIt(1);};
 $("btn-token").onclick=saveToken;
-$("btn-objavi").onclick=publish;
+$("nav-nov").onclick=function(){showView("nov");};
+$("nav-nast").onclick=function(){showView("nast");$("f-token").value=readToken();};
+$("f-iskaj").oninput=function(){renderList($("f-iskaj").value);};
+$("f-naslov").oninput=function(){updateCounts();saveDraft();};
+$("f-povz").oninput=function(){updateCounts();saveDraft();};
+$("f-bes").oninput=function(){updateCounts();saveDraft();};
+$("f-avt").oninput=saveDraft;
+document.onkeydown=function(){ try{ if(event.ctrlKey&&event.keyCode==83){ event.returnValue=false; saveItem(); } }catch(e){} };
+showView("nov");
 loadLocal();
+updateCounts();
 </script>
 </body>
 </html>
