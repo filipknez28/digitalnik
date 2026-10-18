@@ -50,6 +50,36 @@ nav a:hover{color:var(--acid);border-color:var(--acid)}
 .mmenu a:last-child{border-bottom:0;background:var(--ink);color:#000;font-weight:700;text-align:center;border-radius:3px;margin-top:10px;padding:12px 0}
 .mmenu a:last-child:hover{background:var(--acid)}
 
+
+/* login + plošča */
+.btn-login{margin-left:8px;border:1px solid var(--line);color:var(--ink);font-family:var(--mono);font-weight:700;font-size:12px;text-transform:uppercase;padding:8px 16px;border-radius:3px;transition:.15s}
+.btn-login:hover{border-color:var(--acid);color:var(--acid)}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;align-items:center;justify-content:center;z-index:100}
+.modal.open{display:flex}
+.mcard{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:30px;width:min(380px,92vw);text-align:center}
+.mcard h3{font-family:var(--head);font-weight:900;text-transform:uppercase;letter-spacing:-.5px;font-size:22px;margin-bottom:8px}
+.mcard p{color:var(--dim);font-size:14px;margin-bottom:18px}
+.gbtn{width:100%;background:#fff;color:#000;font-weight:700;padding:12px;border-radius:4px;border:0;cursor:pointer;font-family:var(--body);font-size:15px;display:flex;align-items:center;justify-content:center;gap:10px}
+.gbtn:hover{background:var(--acid)}
+.merr{color:var(--mag);font-size:13px;margin-top:12px;min-height:1.2em}
+.mclose{background:none;border:0;color:var(--dim);cursor:pointer;margin-top:14px;font-family:var(--mono);font-size:12px;text-transform:uppercase}
+.mclose:hover{color:var(--ink)}
+#plosca{display:none;padding:48px 0 30px}
+#plosca.show{display:block}
+.pbar{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;flex-wrap:wrap;border-bottom:3px solid var(--ink);padding-bottom:10px}
+.ph2{font-family:var(--head);font-weight:900;font-size:30px;text-transform:uppercase;letter-spacing:-.5px}
+.pside{display:flex;align-items:center;gap:12px}
+.who{font-family:var(--mono);font-size:12px;color:var(--dim)}
+.btn-out{background:var(--ink);color:#000;font-family:var(--mono);font-weight:700;font-size:12px;text-transform:uppercase;padding:9px 16px;border-radius:3px;border:0;cursor:pointer;transition:.15s}
+.btn-out:hover{background:var(--acid)}
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:18px}
+.pcard{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:20px}
+.pcard b{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--dim);display:block;margin-bottom:8px}
+.pcard .v{font-family:var(--head);font-weight:900;font-size:24px;margin-bottom:10px}
+.pcard a{font-family:var(--mono);font-size:12px;color:var(--acid);text-transform:uppercase}
+.pcard a:hover{text-decoration:underline}
+@media(max-width:900px){.pgrid{grid-template-columns:1fr}}
+
 /* hero */
 .hero{display:grid;grid-template-columns:1.7fr 1fr;gap:26px;padding:44px 0 26px}
 .kicker{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:1.5px;color:var(--acid);margin-bottom:12px;display:flex;gap:10px;align-items:center}
@@ -131,11 +161,13 @@ footer .copy{margin-left:auto}
     <nav>
       <a href="#">AI</a><a href="#">Telefoni</a><a href="#">Igre</a><a href="#">Internet</a><a href="#">Startupi</a>
     </nav>
+    <a class="btn-login" href="#" data-login>Prijava</a>
     <a class="btn-sub" href="#naroci">Naroči se</a>
     <button class="burger" aria-label="Meni" aria-expanded="false"><span></span><span></span><span></span></button>
   </div>
   <nav class="mmenu">
     <a href="#">AI</a><a href="#">Telefoni</a><a href="#">Igre</a><a href="#">Internet</a><a href="#">Startupi</a>
+    <a href="#" data-login>Prijava</a>
     <a href="#naroci">Naroči se</a>
   </nav>
 </header>
@@ -182,6 +214,40 @@ footer .copy{margin-left:auto}
     <p class="nl-note">Brez vsiljene pošte. Odjava kadar koli.</p>
   </section>
 
+
+  <section id="plosca">
+    <div class="wrap">
+      <div class="pbar">
+        <div>
+          <div class="kicker">Admin</div>
+          <h2 class="ph2">Nadzorna plošča</h2>
+        </div>
+        <div class="pside">
+          <span class="who" id="pwho"></span>
+          <button class="btn-out" id="logout">Odjava</button>
+        </div>
+      </div>
+      <div class="pgrid">
+        <div class="pcard"><b>Naročniki</b><div class="v" id="psub">…</div><a href="https://buttondown.com/digitalnik" target="_blank" rel="noopener">Upravljaj na Buttondownu</a></div>
+        <div class="pcard"><b>Novičnik</b><div class="v">Digitalnik</div><a href="https://buttondown.com/emails" target="_blank" rel="noopener">Nova pošiljka</a></div>
+        <div class="pcard"><b>Spletna stran</b><div class="v">Uredi</div><a href="https://github.com/filipknez28/digitalnik" target="_blank" rel="noopener">Koda na GitHubu</a></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="modal" id="loginModal">
+    <div class="mcard">
+      <h3>Prijava</h3>
+      <p>Samo za urednika Digitalnika. Prijavi se s svojim Google računom.</p>
+      <button class="gbtn" id="gbtn">
+        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3C33.7 32.9 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3l5.7-5.7C34.5 6.1 29.5 4 24 4 13 4 4 13 4 24s9 20 20 20 20-9 20-20c0-1.3-.1-2.6-.4-3.9z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3l5.7-5.7C34.5 6.1 29.5 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.1H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C36.9 40.4 44 35 44 24c0-1.3-.1-2.6-.4-3.9z"/></svg>
+        Nadaljuj z Google
+      </button>
+      <div class="merr" id="merr"></div>
+      <button class="mclose" id="mclose">Zapri</button>
+    </div>
+  </div>
+
 </main>
 
 <footer>
@@ -197,5 +263,53 @@ var burger=document.querySelector('.burger'),mmenu=document.querySelector('.mmen
 burger.addEventListener('click',function(){var o=mmenu.classList.toggle('open');burger.classList.toggle('open',o);burger.setAttribute('aria-expanded',o)});
 mmenu.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){mmenu.classList.remove('open');burger.classList.remove('open');burger.setAttribute('aria-expanded','false')})});
 </script>
+
+<script type="module">
+const BOSS='filip.knez28@gmail.com';
+const firebaseConfig={apiKey:"TUKAJ_VSTAVI_API_KEY",authDomain:"TUKAJ_VSTAVI.firebaseapp.com",projectId:"TUKAJ_VSTAVI",appId:"TUKAJ_VSTAVI_APP_ID"};
+const modal=document.getElementById('loginModal'),merr=document.getElementById('merr');
+document.querySelectorAll('[data-login]').forEach(function(el){
+  el.addEventListener('click',function(e){
+    if(el.dataset.done)return;
+    e.preventDefault();modal.classList.add('open');merr.textContent='';
+  });
+});
+document.getElementById('mclose').addEventListener('click',function(){modal.classList.remove('open')});
+modal.addEventListener('click',function(e){if(e.target===modal)modal.classList.remove('open')});
+let auth=null;
+try{
+  const {initializeApp}=await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js');
+  const {getAuth,GoogleAuthProvider,signInWithPopup,onAuthStateChanged,signOut}=await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js');
+  auth=getAuth(initializeApp(firebaseConfig));
+  const provider=new GoogleAuthProvider();
+  document.getElementById('gbtn').addEventListener('click',function(){
+    merr.textContent='';
+    if(firebaseConfig.apiKey.indexOf('TUKAJ')===0){merr.textContent='Prijava se bo vklopila, ko bodo vstavljeni Firebase podatki.';return;}
+    signInWithPopup(auth,provider).then(function(res){
+      if(res.user.email===BOSS){modal.classList.remove('open');}
+      else{merr.textContent='Ta račun nima dostopa.';signOut(auth);}
+    }).catch(function(err){
+      if(err.code!=='auth/popup-closed-by-user')merr.textContent='Prijava ni uspela. Poskusi znova.';
+    });
+  });
+  onAuthStateChanged(auth,function(user){
+    const plosca=document.getElementById('plosca'),who=document.getElementById('pwho');
+    if(user&&user.email===BOSS){
+      plosca.classList.add('show');
+      who.textContent='prijavljen: '+user.email;
+      document.querySelectorAll('[data-login]').forEach(function(el){el.dataset.done='1';el.textContent='Nadzorna plošča';el.href='#plosca';});
+    }else{
+      plosca.classList.remove('show');
+      document.querySelectorAll('[data-login]').forEach(function(el){el.dataset.done='';el.textContent='Prijava';el.href='#';});
+      if(user)signOut(auth);
+    }
+  });
+  document.getElementById('logout').addEventListener('click',function(){signOut(auth)});
+}catch(e){console.warn('Firebase ni nastavljen:',e);}
+document.getElementById('gbtn').addEventListener('click',function(){
+  if(!auth)merr.textContent='Prijava še ni povezana: manjkajo Firebase podatki.';
+});
+</script>
+
 </body>
 </html>
