@@ -20,7 +20,7 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.55}
 a{color:inherit;text-decoration:none}
-.wrap{max-width:1400px;margin:0 auto;padding:0 20px}
+.wrap{max-width:1280px;margin:0 auto;padding:0 20px}
 ::selection{background:var(--acid);color:#000}
 
 /* ticker */
@@ -40,6 +40,14 @@ nav a{color:var(--dim);padding:6px 0;border-bottom:2px solid transparent}
 nav a:hover{color:var(--acid);border-color:var(--acid)}
 .btn-sub{margin-left:auto;background:var(--ink);color:#000;font-family:var(--mono);font-weight:700;font-size:12px;text-transform:uppercase;padding:9px 16px;border-radius:3px;transition:.15s}
 .btn-sub:hover{background:var(--acid);transform:translateY(-1px)}
+.burger{display:none;background:none;border:0;cursor:pointer;padding:10px 6px;margin-left:10px}
+.burger span{display:block;width:22px;height:2px;background:var(--ink);margin:5px 0;border-radius:2px;transition:.2s}
+.burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.burger.open span:nth-child(2){opacity:0}
+.burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.mmenu{display:none;position:absolute;top:66px;left:0;right:0;background:var(--bg);border-bottom:1px solid var(--line);padding:6px 20px 16px;flex-direction:column}
+.mmenu a{font-family:var(--mono);font-size:14px;text-transform:uppercase;letter-spacing:.5px;color:var(--dim);padding:13px 0;border-bottom:1px solid var(--line)}
+.mmenu a:last-child{border-bottom:0;color:var(--acid)}
 
 /* hero */
 .hero{display:grid;grid-template-columns:1.7fr 1fr;gap:26px;padding:44px 0 26px}
@@ -92,7 +100,10 @@ footer .copy{margin-left:auto}
   .hero{grid-template-columns:1fr}
   .grid{grid-template-columns:1fr 1fr}
   nav{display:none}
+  .burger{display:block}
+  .mmenu.open{display:flex}
 }
+@media(min-width:901px){.mmenu{display:none!important}}
 @media(max-width:600px){
   .grid{grid-template-columns:1fr}
   .stat{grid-template-columns:1fr;gap:10px;padding:26px}
@@ -119,7 +130,12 @@ footer .copy{margin-left:auto}
       <a href="#">AI</a><a href="#">Telefoni</a><a href="#">Igre</a><a href="#">Internet</a><a href="#">Startupi</a>
     </nav>
     <a class="btn-sub" href="#naroci">Naroči se</a>
+    <button class="burger" aria-label="Meni" aria-expanded="false"><span></span><span></span><span></span></button>
   </div>
+  <nav class="mmenu">
+    <a href="#">AI</a><a href="#">Telefoni</a><a href="#">Igre</a><a href="#">Internet</a><a href="#">Startupi</a>
+    <a href="#naroci">Naroči se</a>
+  </nav>
 </header>
 
 <main class="wrap">
@@ -174,5 +190,10 @@ footer .copy{margin-left:auto}
   </div>
 </footer>
 
+<script>
+var burger=document.querySelector('.burger'),mmenu=document.querySelector('.mmenu');
+burger.addEventListener('click',function(){var o=mmenu.classList.toggle('open');burger.classList.toggle('open',o);burger.setAttribute('aria-expanded',o)});
+mmenu.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){mmenu.classList.remove('open');burger.classList.remove('open');burger.setAttribute('aria-expanded','false')})});
+</script>
 </body>
 </html>
