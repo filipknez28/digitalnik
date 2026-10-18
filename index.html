@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digitalnik — tehnologija brez fraz</title>
+<meta name="description" content="Digitalnik: slovenski tehnološki medij. AI, telefoni, igre in internet.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b0b0f; --bg2:#12121a; --ink:#f2f2f5; --dim:#9b9ba8; --line:#23232e;
+  --acid:#c9ff2e; --mag:#ff3df0; --blue:#4d9dff; --card:#14141c;
+  --head:'Archivo',Impact,sans-serif; --body:'Space Grotesk',system-ui,sans-serif; --mono:'JetBrains Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.55}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+::selection{background:var(--acid);color:#000}
+
+/* ticker */
+.ticker{background:var(--acid);color:#000;overflow:hidden;white-space:nowrap;font-family:var(--mono);font-size:13px;font-weight:700;padding:7px 0;border-bottom:1px solid #000}
+.ticker span{display:inline-block;padding-left:100%;animation:tick 28s linear infinite}
+.ticker b{color:#000;background:#00000022;padding:1px 8px;margin:0 14px;border-radius:99px}
+@keyframes tick{to{transform:translateX(-100%)}}
+
+/* header */
+header.top{position:sticky;top:0;z-index:50;background:rgba(11,11,15,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:28px;height:66px}
+.logo{font-family:var(--head);font-weight:900;font-size:26px;letter-spacing:-1px;text-transform:uppercase;display:flex;align-items:center;gap:6px}
+.logo em{font-style:normal;color:var(--acid)}
+.logo .blik{width:11px;height:11px;background:var(--mag);border-radius:2px;transform:rotate(12deg)}
+nav{display:flex;gap:22px;font-family:var(--mono);font-size:13px;text-transform:uppercase;letter-spacing:.5px}
+nav a{color:var(--dim);padding:6px 0;border-bottom:2px solid transparent}
+nav a:hover{color:var(--acid);border-color:var(--acid)}
+.btn-sub{margin-left:auto;background:var(--ink);color:#000;font-family:var(--mono);font-weight:700;font-size:12px;text-transform:uppercase;padding:9px 16px;border-radius:3px;transition:.15s}
+.btn-sub:hover{background:var(--acid);transform:translateY(-1px)}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.7fr 1fr;gap:26px;padding:44px 0 26px}
+.kicker{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:1.5px;color:var(--acid);margin-bottom:12px;display:flex;gap:10px;align-items:center}
+.kicker::before{content:"";width:26px;height:2px;background:var(--acid)}
+h1.big{font-family:var(--head);font-weight:900;font-size:clamp(34px,5.2vw,62px);line-height:.98;letter-spacing:-1.5px;text-transform:uppercase;margin-bottom:16px}
+h1.big:hover{color:var(--acid)}
+.dek{color:var(--dim);font-size:18px;max-width:56ch;margin-bottom:16px}
+.meta{font-family:var(--mono);font-size:12px;color:var(--dim)}
+.meta b{color:var(--ink)}
+.side{display:flex;flex-direction:column;gap:0}
+.side article{padding:20px 0;border-bottom:1px solid var(--line)}
+.side article:first-child{border-top:1px solid var(--line)}
+.side h3{font-family:var(--head);font-weight:700;font-size:21px;line-height:1.05;text-transform:uppercase;letter-spacing:-.3px;margin:8px 0 6px}
+.side h3:hover{color:var(--mag)}
+.chip{display:inline-block;font-family:var(--mono);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;padding:3px 9px;border-radius:2px}
+.c-ai{background:#3a2dff22;color:#8f9dff;border:1px solid #3a2dff55}
+.c-fon{background:#ff3df018;color:#ff8bf5;border:1px solid #ff3df044}
+.c-igra{background:#c9ff2e18;color:#d7ff6e;border:1px solid #c9ff2e44}
+.c-net{background:#4d9dff18;color:#8fc2ff;border:1px solid #4d9dff44}
+
+/* section head */
+.sect{display:flex;align-items:baseline;justify-content:space-between;border-bottom:3px solid var(--ink);padding-bottom:10px;margin:46px 0 26px}
+.sect h2{font-family:var(--head);font-weight:900;font-size:30px;text-transform:uppercase;letter-spacing:-.5px}
+.sect a{font-family:var(--mono);font-size:12px;color:var(--acid);text-transform:uppercase}
+
+/* grid cards */
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:22px;display:flex;flex-direction:column;gap:10px;transition:.18s}
+.card:hover{transform:translateY(-4px);border-color:var(--acid);box-shadow:0 12px 30px #00000066}
+.card h3{font-family:var(--head);font-weight:700;font-size:19px;line-height:1.1;text-transform:uppercase;letter-spacing:-.2px}
+.card:hover h3{color:var(--acid)}
+.card p{color:var(--dim);font-size:14.5px;flex:1}
+.card .meta{margin-top:4px}
+
+/* stat block */
+.stat{background:linear-gradient(120deg,#14141c,#0d1220);border:1px solid var(--line);border-radius:10px;padding:38px;display:grid;grid-template-columns:auto 1fr;gap:34px;align-items:center;margin-bottom:10px}
+.stat .num{font-family:var(--head);font-weight:900;font-size:clamp(48px,8vw,96px);color:var(--acid);line-height:.9;letter-spacing:-3px}
+.stat h3{font-family:var(--head);font-weight:700;font-size:24px;text-transform:uppercase;margin-bottom:8px}
+.stat p{color:var(--dim);max-width:60ch}
+
+/* footer */
+footer{margin-top:60px;border-top:3px solid var(--ink);padding:30px 0 50px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:18px;align-items:center;font-family:var(--mono);font-size:12px;color:var(--dim);text-transform:uppercase}
+footer .logo{font-size:20px}
+footer a:hover{color:var(--acid)}
+footer .copy{margin-left:auto}
+
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr}
+  .grid{grid-template-columns:1fr 1fr}
+  nav{display:none}
+}
+@media(max-width:600px){
+  .grid{grid-template-columns:1fr}
+  .stat{grid-template-columns:1fr;gap:10px;padding:26px}
+}
+</style>
+</head>
+<body>
+
+<div class="ticker"><span><b>ADMIN</b> Google objavi Gemini 3: AI naj bi sam načrtovala celoten teden <b>TELEFONI</b> iPhone 17 Pro: test kamere po 30 dneh <b>IGRE</b> Nintendo: prek 300 milijonov prodanih Switch 2 <b>NET</b> Evropa naredi svojo alternativa za App Store <b>ADMIN</b> Kaj ko bi tvoj bankomat spraševal po QR kodi? <b>IGRE</b> Roblox je uradno vreden več kot Disney <b>TELEFONI</b> EU prisili USB-C v vse: kaj je naslednje?</span></div>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#"><span class="blik"></span>Digitalnik<em>.</em></a>
+    <nav>
+      <a href="#">AI</a><a href="#">Telefoni</a><a href="#">Igre</a><a href="#">Internet</a><a href="#">Startupi</a>
+    </nav>
+    <a class="btn-sub" href="#">Naroči se</a>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="hero">
+    <article>
+      <div class="kicker">Zadnja novica · AI</div>
+      <h1 class="big"><a href="#">Gemini 3 prihaja v očala: AI, ki ti bere ulico</a></h1>
+      <p class="dek">Googlova nova generacija pametnih očal naj bi v realnem času prepoznavala trgovine, prevoze in spominjala, kje si kaj parkiral. Testirali smo prototip in stvar je bolj čudna, kot si misliš.</p>
+      <p class="meta">Avtor: <b>Filip Knez</b> · pred 2 urama · 7 min branja</p>
+    </article>
+    <div class="side">
+      <article>
+        <span class="chip c-fon">Telefoni</span>
+        <h3><a href="#">iPhone 17 Pro: ali se splača zamenjati stari model?</a></h3>
+        <p class="meta">pred 5 urami</p>
+      </article>
+      <article>
+        <span class="chip c-igra">Igre</span>
+        <h3><a href="#">Nintendo prekoračil 300 milijonov Switch 2 konzol</a></h3>
+        <p class="meta">pred 8 urami</p>
+      </article>
+      <article>
+        <span class="chip c-net">Internet</span>
+        <h3><a href="#">EU hoče svoj app store: kaj to pomeni za tebe</a></h3>
+        <p class="meta">včeraj ob 21:04</p>
+      </article>
+    </div>
+  </section>
+
+  <div class="sect"><h2>Najnovejše</h2><a href="#">Vse →</a></div>
+
+  <section class="grid">
+    <article class="card">
+      <span class="chip c-ai">AI</span>
+      <h3>AI v slovenskih šolah: prvi učitelji že dopuščajo ChatGPT</h3>
+      <p>Dve slovenski šoli testirata AI kot pomočnika pri domači nalogi. Pravilo je eno: pokažeš, kako si ga uporabil.</p>
+      <p class="meta">pred 11 urami</p>
+    </article>
+    <article class="card">
+      <span class="chip c-fon">Telefoni</span>
+      <h3>USB-C v vsem: EU pripravlja naslednji seznam obveznih priključkov</h3>
+      <p>Slušalke, fotoaparati in prenosniki so naslednji na vrsti. Proizvajalci mrmrajo, uporabniki se smejijo.</p>
+      <p class="meta">včeraj</p>
+    </article>
+    <article class="card">
+      <span class="chip c-igra">Igre</span>
+      <h3>Roblox uradno vreden več kot Disney</h3>
+      <p>Platforma, na kateri igrajo predvsem otroci, je prehitela giganta, ki je naredil Mickeyja. Številke so norčava.</p>
+      <p class="meta">včeraj</p>
+    </article>
+    <article class="card">
+      <span class="chip c-net">Internet</span>
+      <h3>Kaj se zgodi, če ti AI prevzame gesla? Testirali smo upravitelje</h3>
+      <p>Passkeys so najvarnejša stvar od praks. Vendar jih skoraj nihče ne uporablja. Smo preverili zakaj.</p>
+      <p class="meta">pred 2 dnevoma</p>
+    </article>
+    <article class="card">
+      <span class="chip c-ai">AI</span>
+      <h3>DeepSeek R2: kitajski model spet pretresa cene AI</h3>
+      <p>Kitajska različica naj bi stala desetino cene zahodnih modelov. Investitorji že spet pišejo zgodovino.</p>
+      <p class="meta">pred 2 dnevoma</p>
+    </article>
+    <article class="card">
+      <span class="chip c-fon">Telefoni</span>
+      <h3>Najboljši telefon pod 300 €: trenutno je to ta model</h3>
+      <p>V srednjem razredu se je loterija spet obrnila. Primerjali smo baterijo, kamero in hitrost, zmagovalec preseneča.</p>
+      <p class="meta">pred 3 dnevi</p>
+    </article>
+  </section>
+
+  <div class="sect"><h2>Številka tedna</h2></div>
+  <section class="stat">
+    <div class="num">1.4%</div>
+    <div>
+      <h3>Toliko evropskih mladih vodi svoj blog ali medij</h3>
+      <p>Ti si en od njih. Digitalnik je dokaz, da za dobre vsebine ne rabiš uredništva z 200 ljudmi, ampak lepo nareto stran in prave teme.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span class="logo">Digitalnik<em>.</em></span>
+    <a href="#">O nas</a><a href="#">Piši nam</a><a href="#">Pravila</a>
+    <span class="copy">© 2026 Digitalnik · Nareto v Sloveniji</span>
+  </div>
+</footer>
+
+</body>
+</html>
