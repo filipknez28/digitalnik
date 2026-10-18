@@ -1,0 +1,240 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Digitalnik Urejevalnik</title>
+<hta:application applicationname="DigitalnikUrejevalnik" singleinstance="yes" scroll="yes" windowstate="normal"/>
+<style>
+body{background:#0b0b0f;color:#f2f2f5;font-family:'Segoe UI',Arial,sans-serif;margin:0}
+.wrap{max-width:1150px;margin:0 auto;padding:14px 18px}
+.topbar{display:flex;align-items:center;gap:8px;border-bottom:2px solid #f2f2f5;padding-bottom:10px}
+.logo{font-family:Impact,'Arial Black',sans-serif;font-size:22px;font-weight:900;text-transform:uppercase;letter-spacing:-1px;white-space:nowrap}
+.logo em{font-style:normal;color:#c9ff2e;font-size:13px;letter-spacing:0}
+.blik{display:inline-block;width:10px;height:10px;background:#ff3df0;border-radius:2px;transform:rotate(12deg);margin-right:5px}
+.spacer{flex:1}
+.btn{background:#c9ff2e;color:#000;border:0;font-weight:700;padding:8px 14px;cursor:pointer;font-size:13px}
+.btn.gray{background:#23232e;color:#f2f2f5}
+.btn:hover{opacity:.85}
+.cols{display:flex;gap:16px;padding:14px 0}
+#left{width:320px;overflow:auto;border-right:1px solid #23232e;padding-right:14px;min-height:420px}
+.item{padding:9px 10px;border:1px solid #23232e;margin-bottom:8px;cursor:pointer;border-radius:4px}
+.item:hover{border-color:#c9ff2e}
+.item.sel{border-color:#ff3df0}
+.item small{color:#9b9ba8;font-family:Consolas,monospace;font-size:11px}
+#right{flex:1}
+label{display:block;font-family:Consolas,monospace;font-size:11px;color:#9b9ba8;text-transform:uppercase;margin:10px 0 4px;letter-spacing:1px}
+input,select,textarea{width:100%;background:#12121a;border:1px solid #23232e;color:#f2f2f5;padding:9px;font-family:'Segoe UI',Arial,sans-serif;font-size:14px;border-radius:3px}
+textarea{resize:vertical}
+#f-povz{height:64px}
+#f-bes{height:210px}
+.formbtns{margin-top:12px;display:flex;gap:8px}
+#log{font-family:Consolas,monospace;font-size:12px;color:#c9ff2e;min-height:36px;padding:8px 0;border-top:1px solid #23232e;margin-top:10px}
+.row{display:flex;gap:8px;align-items:center;margin-top:4px}
+.row input{width:360px}
+.row label{margin:0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div class="logo"><span class="blik"></span>Digitalnik <em>UREJEVALNIK</em></div>
+    <div class="spacer"></div>
+    <button class="btn gray" id="btn-prenesi">Prenesi stran</button>
+    <button class="btn gray" id="btn-objavi">Objavi na GitHub</button>
+  </div>
+  <div class="cols">
+    <div id="left">
+      <label>Novice (najnovejše zgoraj)</label>
+      <div id="list"></div>
+      <button class="btn gray" id="btn-nova" style="width:100%">+ Nova novica</button>
+    </div>
+    <div id="right">
+      <label>Naslov</label><input id="f-naslov">
+      <label>Kategorija</label>
+      <select id="f-kat"><option>AI</option><option>Telefoni</option><option>Igre</option><option>Internet</option><option>Startupi</option></select>
+      <label>Povzetek (kratek, gre pod naslov)</label><textarea id="f-povz"></textarea>
+      <label>Besedilo</label><textarea id="f-bes"></textarea>
+      <label>Avtor</label><input id="f-avt" value="Filip Knez">
+      <div class="formbtns">
+        <button class="btn" id="btn-shrani">Shrani novico</button>
+        <button class="btn gray" id="btn-brisi">Izbriši izbrano</button>
+      </div>
+    </div>
+  </div>
+  <div class="row"><label>GitHub žeton:</label><input id="f-token" placeholder="ustvari ga na github.com/settings/tokens"><button class="btn gray" id="btn-token">Shrani žeton</button></div>
+  <div id="log">Pripravljeno. Najprej klikni "Prenesi stran".</div>
+</div>
+<script language="JScript">
+var FSO=new ActiveXObject("Scripting.FileSystemObject");
+var API="https://api.github.com/repos/filipknez28/digitalnik/contents/index.html";
+var RAW="https://raw.githubusercontent.com/filipknez28/digitalnik/main/index.html";
+var CATCLS={"AI":"c-ai","Telefoni":"c-fon","Igre":"c-igra","Internet":"c-net","Startupi":"c-ai"};
+var html="", data=[], cur=-1;
+
+function myDir(){ var p=unescape(location.pathname).replace(/^\//,""); return p.substring(0,p.lastIndexOf("/")+1); }
+var IDX=myDir()+"index.html", TOKF=myDir()+"token.txt";
+function $(id){return document.getElementById(id);}
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+function say(t){$("log").innerHTML=esc(t);}
+
+function readText(path){
+  var st=new ActiveXObject("ADODB.Stream");
+  st.Type=2; st.Charset="utf-8"; st.Open(); st.LoadFromFile(path);
+  var t=st.ReadText(); st.Close(); return t;
+}
+function writeText(path,t){
+  var st=new ActiveXObject("ADODB.Stream");
+  st.Type=2; st.Charset="utf-8"; st.Open(); st.WriteText(t);
+  st.SaveToFile(path,2); st.Close();
+}
+function utf8B64(s){
+  var st=new ActiveXObject("ADODB.Stream");
+  st.Type=2; st.Charset="utf-8"; st.Open(); st.WriteText(s);
+  st.Position=0; st.Type=1;
+  var bin=st.Read(); st.Close();
+  var xml=new ActiveXObject("MSXML2.DOMDocument.6.0");
+  var n=xml.createElement("b64"); n.dataType="bin.base64"; n.nodeTypedValue=bin;
+  return n.text;
+}
+function fmtKdaj(d){
+  function p2(n){return (n<10?"0":"")+n;}
+  var now=new Date();
+  var base=p2(d.getDate())+". "+p2(d.getMonth()+1)+".";
+  if(d.toDateString()==now.toDateString()) return "danes ob "+p2(d.getHours())+":"+p2(d.getMinutes());
+  return base+" "+d.getFullYear()+" ob "+p2(d.getHours())+":"+p2(d.getMinutes());
+}
+function minB(t){ var n=t.replace(/^\s+|\s+$/g,"").split(/\s+/).length; return Math.max(1,Math.round(n/200))+" min branja"; }
+
+function parseData(){
+  var a=html.indexOf('id="novice-data">'), b=-1;
+  if(a>=0){ b=html.indexOf('<'+'/scr'+'ipt>',a); }
+  if(a<0||b<0){ data=[]; return; }
+  var j=html.substring(a+17,b);
+  try{ data=JSON.parse(j); }catch(e){ data=[]; }
+}
+function splice(s,a,b,rep){
+  var i=s.indexOf(a), j=s.indexOf(b);
+  if(i<0||j<0||j<i) return s;
+  return s.substring(0,i+a.length)+"\n"+rep+"\n"+s.substring(j);
+}
+function renderBlock(){
+  var s='<scr'+'ipt type="application/json" id="novice-data">'+JSON.stringify(data).replace(/<\//g,"<\\/")+'<'+'/scr'+'ipt>\n';
+  if(data.length==0){
+    s+='<section class="hero"><article><div class="kicker">Digitalnik</div><h1 class="big">Kmalu prva novica</h1><p class="dek">Stran je pripravljena in čaka na tvojo prvo novico. Piši jo v urejevalniku DigitalnikUrejevalnik.hta in objavi z gumbom Objavi na GitHub.</p><p class="meta">Urejevalnik: <b>DigitalnikUrejevalnik.hta</b></p></article><div class="side"></div></section>';
+    s+='\n<div class="sect" style="display:none"><h2>Najnovejše</h2></div>\n<section class="grid"></section>';
+    return s;
+  }
+  var h=data[0];
+  s+='<section class="hero"><article><div class="kicker">Zadnja novica · '+esc(h.kat)+'</div><h1 class="big"><a href="#">'+esc(h.naslov)+'</a></h1><p class="dek">'+esc(h.povz)+'</p><p class="meta">Avtor: <b>'+esc(h.avt)+'</b> · '+esc(h.kdaj)+' · '+minB(h.bes)+'</p></article><div class="side">';
+  for(var i=1;i<data.length&&i<4;i++){var a=data[i];
+    s+='<article><span class="chip '+CATCLS[a.kat]+'">'+esc(a.kat)+'</span><h3><a href="#">'+esc(a.naslov)+'</a></h3><p class="meta">'+esc(a.kdaj)+'</p></article>';}
+  s+='</div></section>';
+  if(data.length>1){
+    s+='\n<div class="sect"><h2>Najnovejše</h2></div>\n<section class="grid">';
+    for(var j=1;j<data.length;j++){var b=data[j];
+      s+='<article class="card"><span class="chip '+CATCLS[b.kat]+'">'+esc(b.kat)+'</span><h3>'+esc(b.naslov)+'</h3><p>'+esc(b.povz)+'</p><p class="meta">'+esc(b.kdaj)+'</p></article>';}
+    s+='</section>';
+  }
+  return s;
+}
+function tickerHTML(){
+  var t="";
+  if(data.length==0){ t="<b>DIGITALNIK</b> Prva novica prihaja kmalu."; }
+  else{ for(var i=0;i<data.length;i++){ t+="<b>"+String(data[i].kat).toUpperCase()+"</b> "+esc(data[i].naslov)+" "; } }
+  return "<span>"+t+"</span>";
+}
+function rebuild(){
+  html=splice(html,"<!--NOVICE:START-->","<!--NOVICE:END-->",renderBlock());
+  html=splice(html,"<!--TICKER:START-->","<!--TICKER:END-->",tickerHTML());
+}
+function saveLocal(){
+  rebuild(); writeText(IDX,html);
+  say("Shranjeno lokalno ("+data.length+" novic). Za objavo na spletu klikni Objavi na GitHub.");
+}
+function loadLocal(){
+  if(!FSO.FileExists(IDX)){ say("V tej mapi ni index.html. Klikni Prenesi stran."); renderList(); return; }
+  html=readText(IDX); parseData(); renderList();
+  say("Naloženo: "+data.length+" novic. Piši, Shrani, nato Objavi na GitHub.");
+}
+function downloadSite(){
+  var x=new ActiveXObject("MSXML2.ServerXMLHTTP.6.0");
+  x.open("GET",RAW,false); x.send();
+  if(x.status==200){ html=x.responseText; writeText(IDX,html); parseData(); renderList(); say("Preneseno s spleta: "+data.length+" novic."); }
+  else say("Prenos ni uspel (koda "+x.status+"). Preveri internet.");
+}
+function renderList(){
+  var el=$("list"); el.innerHTML="";
+  if(data.length==0){ el.innerHTML='<div class="item"><small>seznam je prazen</small></div>'; return; }
+  for(var i=0;i<data.length;i++){
+    var d=document.createElement("div");
+    d.className="item"+(i==cur?" sel":"");
+    d.innerHTML="<small>"+esc(data[i].kat)+" · "+esc(data[i].kdaj)+"</small><br>"+esc(data[i].naslov);
+    d.onclick=(function(k){return function(){openItem(k);};})(i);
+    el.appendChild(d);
+  }
+}
+function clearForm(){
+  $("f-naslov").value=""; $("f-povz").value=""; $("f-bes").value=""; $("f-kat").value="AI";
+}
+function openItem(i){
+  cur=i; var a=data[i];
+  $("f-naslov").value=a.naslov; $("f-kat").value=a.kat;
+  $("f-povz").value=a.povz; $("f-bes").value=a.bes; $("f-avt").value=a.avt;
+  renderList();
+}
+function saveItem(){
+  var nas=$("f-naslov").value.replace(/^\s+|\s+$/g,"");
+  if(!nas){ say("Naslov je obvezen."); return; }
+  var it={naslov:nas,kat:$("f-kat").value,povz:$("f-povz").value,bes:$("f-bes").value,avt:$("f-avt").value||"Filip Knez",kdaj:fmtKdaj(new Date())};
+  if(cur<0){ data.unshift(it); cur=0; } else { data[cur]=it; }
+  saveLocal(); renderList();
+}
+function delItem(){
+  if(cur<0){ say("Najprej izberi novico na seznamu."); return; }
+  var ok=true; try{ ok=confirm("Izbrišem novico '"+data[cur].naslov+"'?"); }catch(e){}
+  if(!ok) return;
+  data.splice(cur,1); cur=-1; clearForm(); saveLocal(); renderList();
+}
+function saveToken(){
+  var t=$("f-token").value.replace(/^\s+|\s+$/g,"");
+  if(!t){ say("Žeton je prazen."); return; }
+  writeText(TOKF,t); say("Žeton shranjen v token.txt (ostane samo na tvojem računalniku).");
+}
+function readToken(){
+  if(!FSO.FileExists(TOKF)) return "";
+  return readText(TOKF).replace(/^\s+|\s+$/g,"");
+}
+function publish(){
+  rebuild(); writeText(IDX,html);
+  var tok=readToken();
+  if(!tok){ say("Manjka GitHub žeton: prilepi ga spodaj, klikni Shrani žeton in nato spet Objavi."); return; }
+  say("Objavljam ...");
+  var x=new ActiveXObject("MSXML2.ServerXMLHTTP.6.0");
+  x.open("GET",API,false);
+  x.setRequestHeader("Authorization","token "+tok);
+  x.setRequestHeader("User-Agent","digitalnik-urejevalnik");
+  x.setRequestHeader("Accept","application/vnd.github+json");
+  x.send();
+  if(x.status!=200){ say("GitHub ni odgovoril pri branju (koda "+x.status+"). Preveri žeton."); return; }
+  var sha=""; try{ sha=JSON.parse(x.responseText).sha; }catch(e){}
+  var b64=utf8B64(html);
+  x=new ActiveXObject("MSXML2.ServerXMLHTTP.6.0");
+  x.open("PUT",API,false);
+  x.setRequestHeader("Authorization","token "+tok);
+  x.setRequestHeader("User-Agent","digitalnik-urejevalnik");
+  x.setRequestHeader("Accept","application/vnd.github+json");
+  x.setRequestHeader("Content-Type","application/json");
+  x.send('{"message":"Novice iz urejevalnika","content":"'+b64+'","sha":"'+sha+'"}');
+  if(x.status==200||x.status==201) say("Objavljeno! Stran se posodobi na digitalnik.vercel.app v približno minuti.");
+  else say("GitHub ni sprejel objave (koda "+x.status+"): "+x.responseText.substring(0,160));
+}
+window.resizeTo(1180,840);
+$("btn-prenesi").onclick=downloadSite;
+$("btn-nova").onclick=function(){cur=-1;clearForm();renderList();say("Nova novica: izpolni in Shrani.");};
+$("btn-shrani").onclick=saveItem;
+$("btn-brisi").onclick=delItem;
+$("btn-token").onclick=saveToken;
+$("btn-objavi").onclick=publish;
+loadLocal();
+</script>
+</body>
+</html>
