@@ -150,6 +150,40 @@ footer .copy{margin-left:auto}
 .nlform button{background:var(--acid);color:#000;border:0;font-weight:700;font-family:var(--mono);text-transform:uppercase;padding:12px 20px;border-radius:4px;cursor:pointer}
 .nlform button:hover{background:var(--mag);color:#fff}
 .nl-note{font-size:12px;color:var(--dim);font-family:var(--mono);margin-top:12px}
+
+/* novice iz baze */
+.ngrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.ncard{background:var(--card);border:1px solid #22222e;border-radius:4px;overflow:hidden;cursor:pointer;transition:border-color .15s}
+.ncard:hover{border-color:var(--acid)}
+.ncard img{width:100%;height:180px;object-fit:cover;display:block}
+.nbody{padding:14px 16px 18px}
+.nbadge{display:inline-block;font-family:var(--mono);font-size:11px;color:#000;background:var(--mag);padding:2px 8px;border-radius:2px;font-weight:700}
+.nbody h3{font-family:var(--head);font-size:20px;margin:10px 0 6px;font-weight:800}
+.ndek{color:#b9b9c3;font-size:14px;margin:0}
+.ndate{font-family:var(--mono);font-size:11px;color:var(--dim);margin-top:10px;text-transform:uppercase}
+#clanek{display:none;padding:40px 0 10px}
+#clanek.open{display:block}
+.cwrap{max-width:660px;margin:0 auto}
+.ch2{font-family:var(--head);font-weight:900;font-size:clamp(28px,4vw,44px);margin:10px 0}
+.cdek{color:#b9b9c3;font-size:18px;margin:0 0 8px}
+.cwrap img{width:100%;border-radius:4px;margin:16px 0}
+.cpar{color:#e6e6ee;font-size:17px;line-height:1.65;margin:0 0 14px}
+.cwrap audio{width:100%;margin:16px 0}
+.cback{background:none;border:1px solid #33334a;color:#e6e6ee;padding:8px 16px;border-radius:3px;cursor:pointer;font-family:var(--mono);font-size:12px;text-transform:uppercase;margin-top:18px}
+.cback:hover{border-color:var(--acid);color:var(--acid)}
+/* urejevalnik */
+.peditor{display:none;margin-top:26px;border-top:1px solid #22222e;padding-top:22px}
+.peditor.show{display:block}
+.peditor h3{font-family:var(--head);font-size:22px;font-weight:800;margin:0 0 14px}
+.peditor input:not([type=file]),.peditor textarea{width:100%;box-sizing:border-box;background:#101018;border:1px solid #26263a;color:#f2f2f5;border-radius:3px;padding:10px 12px;font:15px/1.5 inherit;margin-bottom:10px}
+.peditor textarea{min-height:220px;resize:vertical}
+.peditor label{font-family:var(--mono);font-size:11px;color:var(--dim);text-transform:uppercase;display:block;margin:8px 0}
+#pmsg{font-family:var(--mono);font-size:12px;color:var(--acid);margin-left:10px}
+#plist{margin-top:14px}
+.prow2{display:flex;justify-content:space-between;align-items:center;gap:10px;border-bottom:1px solid #1b1b26;padding:8px 0;font-size:14px;color:#c9c9d4}
+.pdel{background:none;border:1px solid #33334a;color:#ff6b8a;border-radius:3px;padding:4px 10px;cursor:pointer;font-size:12px}
+.pdel:hover{border-color:var(--mag)}
+@media(max-width:900px){.ngrid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -180,13 +214,13 @@ footer .copy{margin-left:auto}
     <article>
       <div class="kicker">Digitalnik</div>
       <h1 class="big">Kmalu prva novica</h1>
-      <p class="dek">Stran je pripravljena in čaka na tvojo prvo novico. Piši jo v urejevalniku DigitalnikUrejevalnik.hta, objaviš pa z gumbom "Objavi na GitHub".</p>
-      <p class="meta">Urejevalnik: <b>DigitalnikUrejevalnik.hta</b></p>
+      <p class="dek">Novice pišeš v nadzorni plošči: besedilo, slika in podcast. Objaviš z enim klikom, bralci jih vidijo takoj.</p>
     </article>
     <div class="side"></div>
   </section>
-  <div class="sect" style="display:none"><h2>Najnovejše</h2></div>
-  <section class="grid"></section>
+  <div class="sect" id="novsect" style="display:none"><h2>Najnovejše</h2></div>
+  <section class="ngrid" id="novgrid"></section>
+  <section id="clanek"></section>
   <!--NOVICE:END-->
 
   <div class="sect"><h2>Številka tedna</h2></div>
@@ -232,6 +266,17 @@ footer .copy{margin-left:auto}
         <div class="pcard"><b>Novičnik</b><div class="v">Digitalnik</div><a href="https://buttondown.com/emails" target="_blank" rel="noopener">Nova pošiljka</a></div>
         <div class="pcard"><b>Spletna stran</b><div class="v">Uredi</div><a href="https://github.com/filipknez28/digitalnik" target="_blank" rel="noopener">Koda na GitHubu</a></div>
       </div>
+
+      <div class="peditor" id="peditor">
+        <h3>Nova novica</h3>
+        <input id="ptitle" placeholder="Naslov novice">
+        <input id="pdek" placeholder="Kratek povzetek, en stavek">
+        <textarea id="pbody" placeholder="Besedilo novice. Prazna vrstica = nov odstavek."></textarea>
+        <label>Slika: <input type="file" id="pimg" accept="image/*"></label>
+        <label>Podcast: <input type="file" id="paud" accept="audio/*"></label>
+        <button class="btn-sub" id="ppub">Objavi</button><span id="pmsg"></span>
+        <div id="plist"></div>
+      </div>
     </div>
   </section>
 
@@ -276,15 +321,18 @@ document.querySelectorAll('[data-login]').forEach(function(el){
 });
 document.getElementById('mclose').addEventListener('click',function(){modal.classList.remove('open')});
 modal.addEventListener('click',function(e){if(e.target===modal)modal.classList.remove('open')});
-let auth=null;
+let auth=null,app=null,db=null,stg=null,FS=null,ST=null;
+let NOV=[];
+function el(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e}
+function fmt(ts){try{return ts.toDate().toLocaleDateString('sl-SI',{day:'numeric',month:'long',year:'numeric'})}catch(e){return''}}
 try{
   const {initializeApp}=await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js');
   const {getAuth,GoogleAuthProvider,signInWithPopup,onAuthStateChanged,signOut}=await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js');
-  auth=getAuth(initializeApp(firebaseConfig));
+  app=initializeApp(firebaseConfig);
+  auth=getAuth(app);
   const provider=new GoogleAuthProvider();
   document.getElementById('gbtn').addEventListener('click',function(){
     merr.textContent='';
-    if(firebaseConfig.apiKey.indexOf('TUKAJ')===0){merr.textContent='Prijava se bo vklopila, ko bodo vstavljeni Firebase podatki.';return;}
     signInWithPopup(auth,provider).then(function(res){
       if(res.user.email===BOSS){modal.classList.remove('open');}
       else{merr.textContent='Ta račun nima dostopa.';signOut(auth);}
@@ -296,8 +344,10 @@ try{
     const plosca=document.getElementById('plosca'),who=document.getElementById('pwho');
     if(user&&user.email===BOSS){
       plosca.classList.add('show');
+      document.getElementById('peditor').classList.add('show');
       who.textContent='prijavljen: '+user.email;
       document.querySelectorAll('[data-login]').forEach(function(el){el.dataset.done='1';el.textContent='Nadzorna plošča';el.href='#plosca';});
+      renderAdmin();
     }else{
       plosca.classList.remove('show');
       document.querySelectorAll('[data-login]').forEach(function(el){el.dataset.done='';el.textContent='Prijava';el.href='#';});
@@ -305,9 +355,94 @@ try{
     }
   });
   document.getElementById('logout').addEventListener('click',function(){signOut(auth)});
-}catch(e){console.warn('Firebase ni nastavljen:',e);}
+  const {getFirestore,collection,getDocs,addDoc,deleteDoc,doc,query,orderBy,serverTimestamp}=await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js');
+  const {getStorage,ref,uploadBytes,getDownloadURL}=await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js');
+  FS={collection,getDocs,addDoc,deleteDoc,doc,query,orderBy,serverTimestamp};
+  db=getFirestore(app);
+  ST={ref,uploadBytes,getDownloadURL};
+  stg=getStorage(app);
+  loadNovice();
+}catch(e){console.warn('Firebase:',e);}
 document.getElementById('gbtn').addEventListener('click',function(){
   if(!auth)merr.textContent='Prijava še ni povezana: manjkajo Firebase podatki.';
+});
+async function loadNovice(){
+  const grid=document.getElementById('novgrid'),sect=document.getElementById('novsect');
+  grid.innerHTML='';
+  try{
+    const snap=await FS.getDocs(FS.query(FS.collection(db,'novice'),FS.orderBy('ts','desc')));
+    NOV=snap.docs.map(function(d){const x=d.data();x.id=d.id;return x});
+  }catch(e){console.warn('Baza:',e);return}
+  if(!NOV.length)return;
+  sect.style.display='';
+  NOV.forEach(function(n){
+    const c=el('article','ncard');
+    if(n.slika){const i=document.createElement('img');i.src=n.slika;i.alt=n.naslov||'';i.loading='lazy';c.appendChild(i)}
+    const box=el('div','nbody');
+    if(n.audio)box.appendChild(el('span','nbadge','PODCAST'));
+    box.appendChild(el('h3',null,n.naslov||'Brez naslova'));
+    if(n.dek)box.appendChild(el('p','ndek',n.dek));
+    if(n.ts)box.appendChild(el('div','ndate',fmt(n.ts)));
+    c.appendChild(box);
+    c.addEventListener('click',function(){showClanek(n)});
+    grid.appendChild(c);
+  });
+  renderAdmin();
+}
+function showClanek(n){
+  const s=document.getElementById('clanek');
+  s.innerHTML='';
+  const w=el('div','cwrap');
+  w.appendChild(el('div','kicker','Digitalnik'));
+  w.appendChild(el('h2','ch2',n.naslov||''));
+  if(n.dek)w.appendChild(el('p','cdek',n.dek));
+  if(n.ts)w.appendChild(el('div','ndate',fmt(n.ts)));
+  if(n.slika){const i=document.createElement('img');i.src=n.slika;i.alt='';w.appendChild(i)}
+  (n.body||'').split(/\n+/).forEach(function(t){if(t.trim())w.appendChild(el('p','cpar',t))});
+  if(n.audio){const a=document.createElement('audio');a.controls=true;a.src=n.audio;w.appendChild(a)}
+  const b=el('button','cback','Nazaj na novice');
+  b.addEventListener('click',function(){s.classList.remove('open');document.getElementById('novgrid').scrollIntoView({behavior:'smooth'})});
+  w.appendChild(b);
+  s.appendChild(w);s.classList.add('open');
+  s.scrollIntoView({behavior:'smooth'});
+}
+function renderAdmin(){
+  const list=document.getElementById('plist');
+  if(!list||!FS)return;
+  list.innerHTML='';
+  const user=auth&&auth.currentUser;
+  if(!user||user.email!==BOSS)return;
+  NOV.forEach(function(n){
+    const r=el('div','prow2');
+    r.appendChild(el('span',null,(n.naslov||'brez naslova')+' · '+fmt(n.ts)));
+    const d=el('button','pdel','Izbriši');
+    d.addEventListener('click',async function(){
+      if(!confirm('Res želiš izbrisati novico "'+(n.naslov||'')+'"?'))return;
+      try{await FS.deleteDoc(FS.doc(db,'novice',n.id));loadNovice();}
+      catch(e){console.warn(e);}
+    });
+    r.appendChild(d);
+    list.appendChild(r);
+  });
+}
+document.getElementById('ppub').addEventListener('click',async function(){
+  const msg=document.getElementById('pmsg');
+  if(!FS){msg.textContent='Baza še ni pripravljena.';return}
+  const t=document.getElementById('ptitle').value.trim();
+  if(!t){msg.textContent='Manjka naslov.';return}
+  msg.textContent='Objavljam…';
+  try{
+    let slika=null,audio=null;
+    const im=document.getElementById('pimg').files[0];
+    if(im){const r=ST.ref(stg,'novice/'+Date.now()+'-'+im.name);await ST.uploadBytes(r,im);slika=await ST.getDownloadURL(r)}
+    const au=document.getElementById('paud').files[0];
+    if(au){const r=ST.ref(stg,'novice/'+Date.now()+'-'+au.name);await ST.uploadBytes(r,au);audio=await ST.getDownloadURL(r)}
+    await FS.addDoc(FS.collection(db,'novice'),{naslov:t,dek:document.getElementById('pdek').value.trim(),body:document.getElementById('pbody').value,slika:slika,audio:audio,ts:FS.serverTimestamp()});
+    document.getElementById('ptitle').value='';document.getElementById('pdek').value='';document.getElementById('pbody').value='';
+    document.getElementById('pimg').value='';document.getElementById('paud').value='';
+    msg.textContent='Objavljeno.';
+    loadNovice();
+  }catch(e){console.warn(e);msg.textContent='Objava ni uspela ('+e.code+').';}
 });
 </script>
 
