@@ -47,7 +47,8 @@ nav a:hover{color:var(--acid);border-color:var(--acid)}
 .burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
 .mmenu{display:none;position:absolute;top:66px;left:0;right:0;background:var(--bg);border-bottom:1px solid var(--line);padding:6px 20px 16px;flex-direction:column}
 .mmenu a{font-family:var(--mono);font-size:14px;text-transform:uppercase;letter-spacing:.5px;color:var(--dim);padding:13px 0;border-bottom:1px solid var(--line)}
-.mmenu a:last-child{border-bottom:0;color:var(--acid)}
+.mmenu a:last-child{border-bottom:0;background:var(--ink);color:#000;font-weight:700;text-align:center;border-radius:3px;margin-top:10px;padding:12px 0}
+.mmenu a:last-child:hover{background:var(--acid)}
 
 /* hero */
 .hero{display:grid;grid-template-columns:1.7fr 1fr;gap:26px;padding:44px 0 26px}
@@ -100,7 +101,8 @@ footer .copy{margin-left:auto}
   .hero{grid-template-columns:1fr}
   .grid{grid-template-columns:1fr 1fr}
   nav{display:none}
-  .burger{display:block}
+  .btn-sub{display:none}
+  .burger{display:block;margin-left:auto}
   .mmenu.open{display:flex}
 }
 @media(min-width:901px){.mmenu{display:none!important}}
