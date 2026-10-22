@@ -169,6 +169,16 @@ footer .copy{margin-left:auto}
 .cwrap img{width:100%;border-radius:4px;margin:16px 0}
 .cpar{color:#e6e6ee;font-size:17px;line-height:1.65;margin:0 0 14px}
 .cwrap audio{width:100%;margin:16px 0}
+.cbody p{color:#e6e6ee;font-size:17px;line-height:1.65;margin:0 0 14px}
+.cbody h3{font-family:var(--head);font-size:22px;font-weight:800;margin:22px 0 8px}
+.cbody blockquote{border-left:3px solid var(--acid);margin:16px 0;padding:8px 16px;color:#b9b9c3;font-size:16px}
+.cbody ul{padding-left:24px;margin:0 0 14px;color:#e6e6ee;font-size:17px;line-height:1.65}
+.cbody a{color:var(--acid)}
+.cbody figure{margin:20px 0}
+.cbody img{width:100%;border-radius:4px}
+.cbody figcaption{font:12px/1.5 var(--mono);color:var(--dim);margin-top:8px}
+.cbody figcaption a{color:var(--dim)}
+.cbody .vidwrap{margin:18px 0}
 .cback{background:none;border:1px solid #33334a;color:#e6e6ee;padding:8px 16px;border-radius:3px;cursor:pointer;font-family:var(--mono);font-size:12px;text-transform:uppercase;margin-top:18px}
 .cback:hover{border-color:var(--acid);color:var(--acid)}
 /* urejevalnik */
@@ -177,6 +187,23 @@ footer .copy{margin-left:auto}
 .peditor h3{font-family:var(--head);font-size:22px;font-weight:800;margin:0 0 14px}
 .peditor input:not([type=file]),.peditor textarea{width:100%;box-sizing:border-box;background:#101018;border:1px solid #26263a;color:#f2f2f5;border-radius:3px;padding:10px 12px;font:15px/1.5 inherit;margin-bottom:10px}
 .peditor textarea{min-height:220px;resize:vertical}
+.ptoolbar{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.ptoolbar button{background:#101018;border:1px solid #26263a;color:#c9c9d4;border-radius:3px;padding:6px 12px;font:700 12px var(--mono);cursor:pointer}
+.ptoolbar button:hover{border-color:var(--acid);color:var(--acid)}
+.pedit-body{width:100%;box-sizing:border-box;background:#101018;border:1px solid #26263a;color:#f2f2f5;border-radius:3px;padding:12px 14px;font:15px/1.6 inherit;min-height:220px;outline:none;margin-bottom:10px}
+.pedit-body:focus{border-color:var(--acid)}
+.pedit-body[data-ph]:empty::before{content:attr(data-ph);color:#6a6a7c}
+.pedit-body p{margin:0 0 12px}
+.pedit-body h3{font-size:19px;margin:16px 0 8px;font-weight:800}
+.pedit-body blockquote{border-left:3px solid var(--acid);margin:12px 0;padding:6px 14px;color:#b9b9c3}
+.pedit-body ul{padding-left:22px;margin:0 0 12px}
+.pedit-body figure{margin:14px 0}
+.pedit-body img{max-width:100%;border-radius:3px}
+.pedit-body figcaption{font:12px/1.5 var(--mono);color:var(--dim);margin-top:6px}
+.pedit-body figcaption a{color:var(--dim)}
+.vidwrap{position:relative;padding-bottom:56.25%;height:0;margin:14px 0;border-radius:3px;overflow:hidden}
+.vidwrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
+.pprevwrap{border:1px solid #26263a;border-radius:4px;padding:20px;margin:14px 0;background:#0e0e16}
 .peditor label{font-family:var(--mono);font-size:11px;color:var(--dim);text-transform:uppercase;display:block;margin:8px 0}
 #pmsg{font-family:var(--mono);font-size:12px;color:var(--acid);margin-left:10px}
 #plist{margin-top:14px}
@@ -271,10 +298,23 @@ footer .copy{margin-left:auto}
         <h3>Nova novica</h3>
         <input id="ptitle" placeholder="Naslov novice">
         <input id="pdek" placeholder="Kratek povzetek, en stavek">
-        <textarea id="pbody" placeholder="Besedilo novice. Prazna vrstica = nov odstavek."></textarea>
-        <label>Slika: <input type="file" id="pimg" accept="image/*"></label>
+        <div class="ptoolbar" id="ptool">
+          <button type="button" data-cmd="bold" title="Odebeljeno"><b>B</b></button>
+          <button type="button" data-cmd="italic" title="Poševno"><i>I</i></button>
+          <button type="button" data-act="link" title="Povezava">povezava</button>
+          <button type="button" data-act="h3" title="Podnaslov">naslov</button>
+          <button type="button" data-act="quote" title="Citat">citat</button>
+          <button type="button" data-act="list" title="Seznam">seznam</button>
+          <button type="button" data-act="img" title="Slika z napisom in virom">slika</button>
+          <button type="button" data-act="video" title="YouTube video">video</button>
+        </div>
+        <div class="pedit-body" id="pbody" contenteditable="true" data-ph="Besedilo novice. Označi besedilo in klikni gumb zgoraj za odebeljeno, povezave, slike in video."></div>
+        <input type="file" id="pimgfile" accept="image/*" hidden>
+        <label>Slika na naslovnici: <input type="file" id="pimg" accept="image/*"></label>
         <label>Podcast: <input type="file" id="paud" accept="audio/*"></label>
+        <button class="btn-sub" id="pprevbtn" type="button">Predogled</button>
         <button class="btn-sub" id="ppub">Objavi</button><span id="pmsg"></span>
+        <div class="pprevwrap" id="pprevwrap" hidden></div>
         <div id="plist"></div>
       </div>
     </div>
@@ -395,7 +435,7 @@ function showClanek(n){
   if(n.dek)w.appendChild(el('p','cdek',n.dek));
   if(n.ts)w.appendChild(el('div','ndate',fmt(n.ts)));
   if(n.slika){const i=document.createElement('img');i.src=n.slika;i.alt='';w.appendChild(i)}
-  (n.body||'').split(/\n+/).forEach(function(t){if(t.trim())w.appendChild(el('p','cpar',t))});
+  w.appendChild(bodyNode(n.body));
   if(n.audio){const a=document.createElement('audio');a.controls=true;a.src=n.audio;w.appendChild(a)}
   const b=el('button','cback','Nazaj na novice');
   b.addEventListener('click',function(){s.classList.remove('open');document.getElementById('novgrid').scrollIntoView({behavior:'smooth'})});
@@ -423,6 +463,37 @@ function renderAdmin(){
   });
 }
 
+function escH(t){const d=document.createElement('div');d.textContent=t==null?'':t;return d.innerHTML}
+function escA(t){return escH(t).replace(/"/g,'&quot;')}
+function cleanHTML(h){
+  const d=document.createElement('div');d.innerHTML=h||'';
+  d.querySelectorAll('script,style,object,embed').forEach(function(e){e.remove()});
+  d.querySelectorAll('iframe').forEach(function(f){const u=f.getAttribute('src')||'';if(!/^https:\/\/(www\.youtube-nocookie\.com|www\.youtube\.com|player\.vimeo\.com)\//.test(u))f.remove()});
+  d.querySelectorAll('*').forEach(function(e){[].forEach.call(e.attributes,function(a){if(/^on/i.test(a.name))e.removeAttribute(a.name)})});
+  return d.innerHTML;
+}
+function bodyNode(html){
+  const d=document.createElement('div');d.className='cbody';
+  const h=html||'';
+  if(h.includes('<'))d.innerHTML=cleanHTML(h);
+  else h.split(/\n+/).forEach(function(t){if(t.trim()){const p=document.createElement('p');p.textContent=t.trim();d.appendChild(p)}});
+  return d;
+}
+function ytId(u){const m=(u||'').match(/(?:youtu\.be\/|v=|shorts\/|embed\/)([\w-]{11})/);return m?m[1]:(/^[\w-]{11}$/.test((u||'').trim())?u.trim():null)}
+function insertFigure(url){
+  const cap=prompt('Napis pod sliko (lahko pusti prazno):')||'';
+  const vir=prompt('Vir slike: povezava ali ime (lahko pusti prazno):')||'';
+  let h='<figure><img src="'+escA(url)+'" alt="'+escA(cap)+'" loading="lazy">';
+  const parts=[];
+  if(cap)parts.push(escH(cap));
+  if(vir){
+    if(/^https?:\/\//i.test(vir))parts.push('vir: <a href="'+escA(vir)+'" target="_blank" rel="noopener">'+escH(vir.replace(/^https?:\/\//,''))+'</a>');
+    else parts.push('vir: '+escH(vir));
+  }
+  if(parts.length)h+='<figcaption>'+parts.join(' &middot; ')+'</figcaption>';
+  h+='</figure><p><br></p>';
+  document.execCommand('insertHTML',false,h);
+}
 async function cldUpload(file,folder){
   const f=new FormData();
   f.append('file',file);
@@ -433,6 +504,41 @@ async function cldUpload(file,folder){
   if(!r.ok||!j.secure_url){throw new Error(j.error&&j.error.message||'nalaganje v Cloudinary ni uspelo')}
   return j.secure_url;
 }
+document.getElementById('ptool').addEventListener('click',function(e){
+  const b=e.target.closest('button');if(!b)return;
+  document.getElementById('pbody').focus();
+  const act=b.dataset.act;
+  if(b.dataset.cmd){document.execCommand(b.dataset.cmd);return}
+  if(act==='link'){const u=prompt('Naslov povezave (URL):');if(u)document.execCommand('createLink',false,u)}
+  else if(act==='h3'){document.execCommand('formatBlock',false,'h3')}
+  else if(act==='quote'){document.execCommand('formatBlock',false,'blockquote')}
+  else if(act==='list'){document.execCommand('insertUnorderedList')}
+  else if(act==='img'){document.getElementById('pimgfile').click()}
+  else if(act==='video'){
+    const u=prompt('Prilepi YouTube povezavo (ali 11-mestno kodo):');
+    const id=ytId(u);
+    if(id)document.execCommand('insertHTML',false,'<div class="vidwrap"><iframe src="https://www.youtube-nocookie.com/embed/'+escA(id)+'" title="Video" allowfullscreen loading="lazy"></iframe></div><p><br></p>');
+  }
+});
+document.getElementById('pimgfile').addEventListener('change',async function(){
+  const f=this.files[0];this.value='';if(!f)return;
+  const msg=document.getElementById('pmsg');msg.textContent='Nalagam sliko v urejevalnik…';
+  try{const url=await cldUpload(f,'slika');insertFigure(url);msg.textContent=''}
+  catch(e){msg.textContent='Nalaganje slike ni uspelo.'}
+});
+document.getElementById('pprevbtn').addEventListener('click',function(){
+  const pv=document.getElementById('pprevwrap');
+  if(!pv.hidden){pv.hidden=true;this.textContent='Predogled';return}
+  const t=document.getElementById('ptitle').value.trim()||'Naslov novice';
+  const dk=document.getElementById('pdek').value.trim();
+  pv.innerHTML='';
+  const w=el('div','cwrap');
+  w.appendChild(el('div','kicker','Digitalnik'));
+  w.appendChild(el('h2','ch2',t));
+  if(dk)w.appendChild(el('p','cdek',dk));
+  w.appendChild(bodyNode(document.getElementById('pbody').innerHTML));
+  pv.appendChild(w);pv.hidden=false;this.textContent='Skrij predogled';
+});
 document.getElementById('ppub').addEventListener('click',async function(){
   const msg=document.getElementById('pmsg');
   if(!FS){msg.textContent='Baza še ni pripravljena.';return}
@@ -445,9 +551,9 @@ document.getElementById('ppub').addEventListener('click',async function(){
     if(im)slika=await cldUpload(im,'slika');
     const au=document.getElementById('paud').files[0];
     if(au)audio=await cldUpload(au,'podcast');
-    await FS.addDoc(FS.collection(db,'novice'),{naslov:t,dek:document.getElementById('pdek').value.trim(),body:document.getElementById('pbody').value,slika:slika,audio:audio,ts:FS.serverTimestamp()});
+    await FS.addDoc(FS.collection(db,'novice'),{naslov:t,dek:document.getElementById('pdek').value.trim(),body:cleanHTML(document.getElementById('pbody').innerHTML),slika:slika,audio:audio,ts:FS.serverTimestamp()});
     document.getElementById('ptitle').value='';document.getElementById('pdek').value='';document.getElementById('pbody').value='';
-    document.getElementById('pimg').value='';document.getElementById('paud').value='';
+    document.getElementById('pimg').value='';document.getElementById('paud').value='';document.getElementById('pbody').innerHTML='';document.getElementById('pprevwrap').hidden=true;document.getElementById('pprevbtn').textContent='Predogled';
     msg.textContent='Objavljeno.';
     loadNovice();
   }catch(e){console.warn(e);msg.textContent='Objava ni uspela ('+e.code+').';}
