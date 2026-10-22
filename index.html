@@ -321,7 +321,7 @@ document.querySelectorAll('[data-login]').forEach(function(el){
 });
 document.getElementById('mclose').addEventListener('click',function(){modal.classList.remove('open')});
 modal.addEventListener('click',function(e){if(e.target===modal)modal.classList.remove('open')});
-let auth=null,app=null,db=null,stg=null,FS=null,ST=null;
+let auth=null,app=null,db=null,FS=null;
 let NOV=[];
 function el(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e}
 function fmt(ts){try{return ts.toDate().toLocaleDateString('sl-SI',{day:'numeric',month:'long',year:'numeric'})}catch(e){return''}}
@@ -356,11 +356,8 @@ try{
   });
   document.getElementById('logout').addEventListener('click',function(){signOut(auth)});
   const {getFirestore,collection,getDocs,addDoc,deleteDoc,doc,query,orderBy,serverTimestamp}=await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js');
-  const {getStorage,ref,uploadBytes,getDownloadURL}=await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js');
   FS={collection,getDocs,addDoc,deleteDoc,doc,query,orderBy,serverTimestamp};
   db=getFirestore(app);
-  ST={ref,uploadBytes,getDownloadURL};
-  stg=getStorage(app);
   loadNovice();
 }catch(e){console.warn('Firebase:',e);}
 document.getElementById('gbtn').addEventListener('click',function(){
@@ -425,6 +422,17 @@ function renderAdmin(){
     list.appendChild(r);
   });
 }
+
+async function cldUpload(file,folder){
+  const f=new FormData();
+  f.append('file',file);
+  f.append('upload_preset','digitalnik_unsigned');
+  f.append('folder','digitalnik/'+folder);
+  const r=await fetch('https://api.cloudinary.com/v1_1/vdenuu6t/auto/upload',{method:'POST',body:f});
+  const j=await r.json();
+  if(!r.ok||!j.secure_url){throw new Error(j.error&&j.error.message||'nalaganje v Cloudinary ni uspelo')}
+  return j.secure_url;
+}
 document.getElementById('ppub').addEventListener('click',async function(){
   const msg=document.getElementById('pmsg');
   if(!FS){msg.textContent='Baza še ni pripravljena.';return}
@@ -434,9 +442,9 @@ document.getElementById('ppub').addEventListener('click',async function(){
   try{
     let slika=null,audio=null;
     const im=document.getElementById('pimg').files[0];
-    if(im){const r=ST.ref(stg,'novice/'+Date.now()+'-'+im.name);await ST.uploadBytes(r,im);slika=await ST.getDownloadURL(r)}
+    if(im)slika=await cldUpload(im,'slika');
     const au=document.getElementById('paud').files[0];
-    if(au){const r=ST.ref(stg,'novice/'+Date.now()+'-'+au.name);await ST.uploadBytes(r,au);audio=await ST.getDownloadURL(r)}
+    if(au)audio=await cldUpload(au,'podcast');
     await FS.addDoc(FS.collection(db,'novice'),{naslov:t,dek:document.getElementById('pdek').value.trim(),body:document.getElementById('pbody').value,slika:slika,audio:audio,ts:FS.serverTimestamp()});
     document.getElementById('ptitle').value='';document.getElementById('pdek').value='';document.getElementById('pbody').value='';
     document.getElementById('pimg').value='';document.getElementById('paud').value='';
